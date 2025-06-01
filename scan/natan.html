@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.0.0/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+    <style>
+      /* Scan guide overlay */
+      #scan-guide {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 200px;
+        opacity: 0.6;
+        z-index: 10;
+      }
+
+      #scan-guide.hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SCANNING UI OVERLAY -->
+    <div id="scan-guide">
+      <img src="https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/targets1.mind" alt="Scan Guide" style="width:100%">
+    </div>
+
+      <div id="loading-ui" class="overlay-ui">
+      Loading scanner...
+    </div>
+
+    <div id="error-ui" class="overlay-ui hidden">
+      Error: Kamera tidak tersedia. Pastikan memberi izin akses kamera.
+    </div>
+    
+    <a-scene
+      mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/targets1.mind;
+                    maxTrack: 2;
+                    uiScanning: #scan-guide;
+                    filterMinCF: 0.0001;
+                    filterBeta: 0.0001;"
+      color-space="sRGB"
+      renderer="colorManagement: true, physicallyCorrectLights"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+    >
+      <a-assets>
+        <a-asset-item id="natan" src="https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/natan_-_tidal_lord (1)/scene.gltf"></a-asset-item>
+      </a-assets>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-gltf-model
+          rotation="0 0 0"
+          position="0.1 -0.6 0"
+          scale="75 75 75"
+          smooth-follow
+          src="#natan"
+          animation-mixer
+        ></a-gltf-model>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>
