@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>VirtualTsheert</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/images/logos.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+ 
+ <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      padding: 30px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    p.description {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .character-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .character-card {
+      background-color: white;
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .character-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .character-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .character-name {
+      display: block;
+      margin-top: 0px;
+      font-weight: bold;
+      font-size: 26px;
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    .character-name:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #888;
+    }
+    </style>
+</head>
+<body class="on">
+
+ <!--navbar on-->
+     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+        <div class="title" style="font-size: 30px; font-weight: bold; font-family: 'Poppins', sans-serif;">
+           <a href="../" style="text-decoration: none; color: #000000;">VirtualTsheert</a>
+        </div>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/scan/">SCAN NOW</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/galery/">GALERY</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link" href="">PRODUCT</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            SELENGKAPNYA
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/How_to_scan_VirtualTsheert/">How to scan VirtualTsheert</a></li>
+            <li><a class="dropdown-item" href="/Sosial media/">Sosial media</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/contact/">Layanan Pelanggan</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+
+         <div class="icon-cart ms-3 me-3"> <!-- Tambahkan margin start (kiri) & end (kanan) -->
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0h8m-8 0-1-4m9 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-9-4h10l2-7H3m2 7L3 4m0 0-.792-3H1"/>
+                </svg>
+                 <span>0</span>
+         </div>
+
+             
+
+    </div>
+  </div>
+</nav>
+<!-- NAVBAR effect on -->
+  <style>
+.nav-link {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: #0d6efd; /* Warna biru Bootstrap */
+  transform: scale(1.05);
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #0d6efd;
+  transition: width 0.3s;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+</style>
+<!-- NAVBAR effect off -->
+
+
+<!-- text -->
+<div style="text-align: center; margin-top: 40px;">
+  <h1 style="font-family: 'Orbitron', sans-serif; font-size: 48px; color: rgb(0, 0, 0); letter-spacing: 2px;">
+    Scan your T-shirt
+  </h1>
+  <p style="color: #000000; font-size: 18px;">
+   Modern t-shirts designed with built-in Augmented Reality features. </p>
+</div>
+<!-- text end -->
+ 
+<!--steps on-->
+  <section class="steps">
+    <h2>Cara Pakai Kaos AR</h2>
+    <div class="step-container">
+      <div class="step">
+        <img src="https://cdn-icons-png.flaticon.com/512/892/892458.png" alt="Step 1" />
+        <h3>1. Pakai Kaos AR</h3>
+        <p>Kenakan kaos dari Vitute.id yang sudah dilengkapi desain AR eksklusif.</p>
+      </div>
+      <div class="step">
+        <img src="https://cdn-icons-png.flaticon.com/512/2838/2838912.png" alt="Step 2" />
+        <h3>2. Scan Gambar</h3>
+        <p>Arahkan kamera HP ke gambar pada kaos menggunakan website kami.</p>
+      </div>
+      <div class="step">
+        <img src="https://cdn-icons-png.flaticon.com/512/2503/2503508.png" alt="Step 3" />
+        <h3>3. Lihat Karakter Hidup!</h3>
+        <p>Saksikan karakter muncul dari kaos secara nyata melalui AR di layar HP.</p>
+      </div>
+    </div>
+  </section>
+
+  
+ 
+  
+  <main>
+    <p class="description">Pilih karakter kaos untuk memulai proses scan.</p>
+
+    <div class="character-grid">
+      <div class="character-card">
+     <img src="https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/images/1.png" alt="Naruto">
+        <a href="/scan/claude.html" class="character-name">Claude</a>
+      </div>
+
+      <div class="character-card">
+        <img src="https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/images/2.png" alt="Luffy">
+        <a href="/scan/natan.html" class="character-name">Natan</a>
+      </div>
+
+      <div class="character-card">
+        <img src="https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/images/3.png" alt="Goku">
+        <a href="/natan.html" class="character-name">Arlot</a>
+      </div>
+
+      <div class="character-card">
+        <img src="https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/images/4.png" alt="Aang">
+        <a href="/claude.html" class="character-name">Harley</a>
+      </div>
+
+      <div class="character-card">
+     <img src="https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/images/5.png" alt="Naruto">
+        <a href="/claude.html" class="character-name">Claude</a>
+      </div>
+
+      <div class="character-card">
+        <img src="https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/images/6.png" alt="Luffy">
+        <a href="/natan.html" class="character-name">Natan</a>
+      </div>
+
+      <div class="character-card">
+        <img src="https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/images/7.png" alt="Goku">
+        <a href="/natan.html" class="character-name">Arlot</a>
+      </div>
+
+      <div class="character-card">
+        <img src="https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/images/8.png" alt="Aang">
+        <a href="/claude.html" class="character-name">Harley</a>
+      </div>
+      <!-- Tambahkan karakter lainnya di sini -->
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 VirtualTsheert. All rights reserved.
+  </footer>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+<div style="height: 1000px;"></div>
+
+</body>
+</html>
