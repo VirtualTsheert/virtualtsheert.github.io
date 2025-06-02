@@ -137,4 +137,49 @@ button{
         flex: 1 1 100%;
       }
     }
+.character-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .character-card {
+      background-color: white;
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .character-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .character-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .character-name {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 26px;
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    .character-name:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #888;
+    }
     
