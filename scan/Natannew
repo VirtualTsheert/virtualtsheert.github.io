@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Augmented Reality Interaktif</title>
+    <!-- Pustaka A-Frame untuk WebXR -->
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <!-- Pustaka A-Frame Extras untuk animasi mixer dan kontrol lainnya -->
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.0.0/dist/aframe-extras.min.js"></script>
+    <!-- Pustaka MindAR untuk Image Tracking -->
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <style>
+    /* CSS Kustom untuk Tampilan AR dan Kontrol */
+    :root {
+      --main-color: #00ffff;
+      --font-stack: 'Segoe UI', sans-serif;
+      --fake-depth: 9999;
+    }
+    body {
+        margin: 0;
+        overflow: hidden;
+    }
+    .hidden-debug-class {
+      display: none;
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Style untuk pesan di atas kamera */
+    #instruction-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 1.5rem;
+        z-index: 1000;
+        opacity: 1;
+        transition: opacity 1s;
+        padding: 20px;
+    }
+    .hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    /* Kontrol UI Baru: Tombol dan Notifikasi */
+    #controls {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 15px;
+        z-index: 100;
+    }
+    .control-btn {
+        background: rgba(255, 255, 255, 0.9);
+        color: #1a1a1a;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        transition: transform 0.1s, background-color 0.2s;
+        display: flex;
+        align-items: center;
+    }
+    .control-btn:hover {
+        background: white;
+    }
+    .control-btn:active {
+        transform: scale(0.95);
+    }
+    .recording {
+        background: #ff0000 !important;
+        color: white !important;
+    }
+    .recording:before {
+        content: '●';
+        margin-right: 8px;
+        animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+        0% { opacity: 0.5; }
+        50% { opacity: 1; }
+        100% { opacity: 0.5; }
+    }
+    
+    /* Style untuk kotak notifikasi kustom */
+    #message-box {
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 20px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        border-radius: 8px;
+        z-index: 101;
+        opacity: 0;
+        transition: opacity 0.5s;
+        pointer-events: none;
+        font-size: 0.9rem;
+    }
+  </style>
+  </head>
+  <body>
+    <!-- Overlay Instruksi -->
+    <div id="instruction-overlay">
+        Temukan dan pindai target gambar Anda. Kamera mungkin memerlukan izin.
+    </div>
+
+    <!-- Kontrol Tombol Foto & Rekam -->
+    <div id="controls">
+        <button id="capture-btn" class="control-btn" onclick="capturePhoto()">
+            Ambil Foto
+        </button>
+        <button id="record-btn" class="control-btn" onclick="toggleRecording()">
+            Rekam Video
+        </button>
+    </div>
+
+    <!-- Kotak Pesan Kustom -->
+    <div id="message-box"></div>
+
+
+    <!-- Scene AR menggunakan MindAR dan A-Frame -->
+    <a-scene 
+      mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/targets1.mind; maxTrack: 2; filterMinCF: 0.0001;  filterBeta: 0.0001;" 
+      color-space="sRGB" 
+      renderer="colorManagement: true, physicallyCorrectLights" 
+      vr-mode-ui="enabled: false" 
+      device-orientation-permission-ui="enabled: false"
+    >
+      <a-assets>
+        <a-asset-item id="natan" src="https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/natan_-_tidal_lord (1)/scene.gltf"></a-asset-item>
+        <a-asset-item id="claude" src="https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/claude/scene.gltf"></a-asset-item>
+      </a-assets>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <!-- Target 0: Natan -->
+      <a-entity mindar-image-target="targetIndex: 0">
+        <!-- Model Natan -->
+        <a-gltf-model rotation="0 0 0 " position="0.1 -0.6 0" scale="75 75 75" smooth-follow src="#natan" animation-mixer>
+        </a-gltf-model>
+        <!-- Teks informasi (Opsional) -->
+        <a-text value="Natan - Tidal Lord" color="#00ffff" align="center" position="0 1.2 0" scale="0.5 0.5 0.5"></a-text>
+      </a-entity>
+      
+      <!-- Target 1: Claude -->
+      <a-entity mindar-image-target="targetIndex: 1">
+        <!-- Model Claude -->
+        <a-gltf-model rotation="0 0 0 " position="0 -0.6 0" scale="15 15 15" smooth-follow src="#claude" animation-mixer="clip: city_special_idle_01">
+        </a-gltf-model> 
+        <!-- Teks informasi baru yang ditambahkan -->
+        <a-text value="Claude - The Genius" color="#ffaa00" align="center" position="0 1.2 0" scale="0.6 0.6 0.6"></a-text>
+      </a-entity>
+    </a-scene>
+
+    <script>
+        // Variabel Perekam Video
+        let mediaRecorder;
+        let recordedChunks = [];
+        let isRecording = false;
+
+        // --- UTILITY FUNCTIONS ---
+
+        // Fungsi untuk menampilkan pesan notifikasi kustom (pengganti alert())
+        function showMessage(text, isError = false) {
+            const messageBox = document.getElementById('message-box');
+            messageBox.textContent = text;
+            messageBox.style.backgroundColor = isError ? 'rgba(255, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.7)';
+            messageBox.style.opacity = '1';
+
+            setTimeout(() => {
+                messageBox.style.opacity = '0';
+            }, 3000);
+        }
+        
+        // Fungsi untuk mendapatkan elemen canvas WebGL
+        function getCanvas() {
+            // A-Frame menggunakan canvas, kita ambil elemen canvas pertama
+            return document.querySelector('canvas');
+        }
+
+        // --- FUNGSI FOTO ---
+        function capturePhoto() {
+            const canvas = getCanvas();
+            if (!canvas) {
+                showMessage("Error: Canvas tidak ditemukan.", true);
+                return;
+            }
+
+            // Dapatkan data URL gambar (PNG)
+            const dataURL = canvas.toDataURL('image/png');
+            
+            // Buat tautan download
+            const a = document.createElement('a');
+            a.href = dataURL;
+            a.download = 'AR_Snapshot_' + Date.now() + '.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            showMessage("Foto berhasil diambil!");
+        }
+
+        // --- FUNGSI REKAM VIDEO ---
+        function startRecording(canvas) {
+            const stream = canvas.captureStream(30); // 30 FPS
+            recordedChunks = [];
+
+            // Pilihan MIME type terbaik
+            const mimeType = MediaRecorder.isTypeSupported('video/webm; codecs=vp9') 
+                ? 'video/webm; codecs=vp9' 
+                : 'video/webm';
+
+            try {
+                mediaRecorder = new MediaRecorder(stream, { mimeType });
+            } catch (e) {
+                console.error('MediaRecorder failed:', e);
+                showMessage(`Perekaman tidak didukung oleh browser ini. Error: ${e.message}`, true);
+                return;
+            }
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(recordedChunks, { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                
+                // Buat tautan download untuk video
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'AR_Video_' + Date.now() + '.webm';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                URL.revokeObjectURL(url); // Bersihkan URL objek
+                showMessage("Perekaman video selesai dan siap diunduh!");
+            };
+
+            mediaRecorder.start();
+            isRecording = true;
+            document.getElementById('record-btn').classList.add('recording');
+            document.getElementById('record-btn').textContent = 'STOP REKAM';
+            showMessage("Perekaman dimulai (max 30 detik).");
+
+            // Otomatis berhenti setelah 30 detik untuk menghindari file terlalu besar
+            setTimeout(() => {
+                if (isRecording) {
+                    stopRecording();
+                }
+            }, 30000);
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                isRecording = false;
+                document.getElementById('record-btn').classList.remove('recording');
+                document.getElementById('record-btn').textContent = 'Rekam Video';
+            }
+        }
+
+        function toggleRecording() {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                const canvas = getCanvas();
+                if (canvas) {
+                    startRecording(canvas);
+                } else {
+                    showMessage("Error: Canvas AR tidak ditemukan.", true);
+                }
+            }
+        }
+        
+        // --- LOGIKA AR & OVERLAY ---
+
+        // Sembunyikan overlay instruksi setelah AR dimulai
+        document.addEventListener('mindar-image-target-found', function (event) {
+            const overlay = document.getElementById('instruction-overlay');
+            if (overlay && !overlay.classList.contains('hidden')) {
+                overlay.classList.add('hidden');
+            }
+        });
+
+        // Tampilkan overlay jika target hilang (logika sederhana)
+        document.addEventListener('mindar-image-target-lost', function (event) {
+             const overlay = document.getElementById('instruction-overlay');
+             // Hanya tampilkan kembali jika Anda ingin pengguna mencari lagi, tetapi seringkali ini mengganggu.
+        });
+        
+        // Sembunyikan instruksi setelah beberapa detik awal, asumsikan kamera sudah diminta
+        setTimeout(() => {
+            const overlay = document.getElementById('instruction-overlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+            }
+        }, 5000); // Sembunyikan setelah 5 detik jika target belum ditemukan
+
+    </script>
+  </body>
+</html>
