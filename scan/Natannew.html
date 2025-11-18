@@ -34,18 +34,18 @@
   <body>
     <!-- Custom UI overlays -->
     <div id="scanning-overlay" class="overlay-ui">
-      <img src="https://cdn.jsdelivr.net/gh/VirtualTsheert/virtualtsheert.github.io@main/images/scan-guide/Manchester_United_FC_crest.svg.png" alt="Scan guide" />
+      <img src="https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/images/scan-guide/Manchester_United_FC_crest.svg.png" alt="Scan guide" />
     </div>
 
-    <a-scene mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/targetsMU.mind; maxTrack: 1; filterMinCF: 0.0001; filterBeta: 0.0001; uiScanning: #scanning-overlay; uiLoading: #loading-ui; uiError: #error-ui;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+    <a-scene mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/images/scan-guide/targetsMU.mind; maxTrack: 1; filterMinCF: 0.0001; filterBeta: 0.0001; uiScanning: #scanning-overlay; uiLoading: #loading-ui; uiError: #error-ui;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       <a-assets>
-         <a-asset-item id="MU" src="https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/scene.gltf"></a-asset-item>
+         <a-asset-item id="MU" src="https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/images/scan-guide/scene.gltf"></a-asset-item>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
        <a-entity mindar-image-target="targetIndex: 0">
-        <a-gltf-model rotation="0 0 0" position="0.1 -0.6 0" scale="75 75 75" smooth-follow src="#MU" animation-mixer></a-gltf-model>
+        <a-gltf-model rotation="0 0 0" position="0.1 0.6 0" scale="75 75 75" smooth-follow src="#MU" animation-mixer></a-gltf-model>
       </a-entity>
     </a-scene>
   </body>
