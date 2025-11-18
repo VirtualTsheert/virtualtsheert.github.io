@@ -133,15 +133,15 @@
 
     <!-- Scene AR menggunakan MindAR dan A-Frame -->
     <a-scene 
-      mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/targets1.mind; maxTrack: 2; filterMinCF: 0.0001;  filterBeta: 0.0001;" 
+      mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/targetsMU.mind; maxTrack: 1; filterMinCF: 0.0001;  filterBeta: 0.0001;" 
       color-space="sRGB" 
       renderer="colorManagement: true, physicallyCorrectLights" 
       vr-mode-ui="enabled: false" 
       device-orientation-permission-ui="enabled: false"
     >
       <a-assets>
-        <a-asset-item id="natan" src="https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/natan_-_tidal_lord (1)/scene.gltf"></a-asset-item>
-        <a-asset-item id="claude" src="https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/claude/scene.gltf"></a-asset-item>
+        <a-asset-item id="MU" src="https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/scene.gltf"></a-asset-item>
+        <a-asset-item id="MU" src="https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/scene.gltf"></a-asset-item>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -149,19 +149,19 @@
       <!-- Target 0: Natan -->
       <a-entity mindar-image-target="targetIndex: 0">
         <!-- Model Natan -->
-        <a-gltf-model rotation="0 0 0 " position="0.1 -0.6 0" scale="75 75 75" smooth-follow src="#natan" animation-mixer>
+        <a-gltf-model rotation="0 0 0 " position="0.1 -0.6 0" scale="75 75 75" smooth-follow src="#MU" animation-mixer>
         </a-gltf-model>
         <!-- Teks informasi (Opsional) -->
-        <a-text value="Natan - Tidal Lord" color="#00ffff" align="center" position="0 1.2 0" scale="0.5 0.5 0.5"></a-text>
+        <a-text value="MU - Tidal Lord" color="#00ffff" align="center" position="0 1.2 0" scale="0.5 0.5 0.5"></a-text>
       </a-entity>
       
       <!-- Target 1: Claude -->
       <a-entity mindar-image-target="targetIndex: 1">
         <!-- Model Claude -->
-        <a-gltf-model rotation="0 0 0 " position="0 -0.6 0" scale="15 15 15" smooth-follow src="#claude" animation-mixer="clip: city_special_idle_01">
+        <a-gltf-model rotation="0 0 0 " position="0 0.6 0" scale="15 15 15" smooth-follow src="#MU" animation-mixer="clip: city_special_idle_01">
         </a-gltf-model> 
         <!-- Teks informasi baru yang ditambahkan -->
-        <a-text value="Claude - The Genius" color="#ffaa00" align="center" position="0 1.2 0" scale="0.6 0.6 0.6"></a-text>
+        <a-text value="MU - The Genius" color="#ffaa00" align="center" position="0 1.2 0" scale="0.6 0.6 0.6"></a-text>
       </a-entity>
     </a-scene>
 
