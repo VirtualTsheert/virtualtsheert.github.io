@@ -1,22 +1,584 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
-    <link rel="stylesheet" href="style.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VirtualTsheert — Augmented Reality Fashion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0E1A;
+    --surface: #131829;
+    --surface-2: #1B2138;
+    --line: #2A3152;
+    --text: #ECE9FF;
+    --muted: #8891B5;
+    --cyan: #6EE7F9;
+    --magenta: #FF5FD8;
+    --gradient: linear-gradient(120deg, var(--cyan), var(--magenta));
+  }
 
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:
+      radial-gradient(circle at 15% 0%, rgba(110,231,249,0.08), transparent 45%),
+      radial-gradient(circle at 85% 15%, rgba(255,95,216,0.08), transparent 45%),
+      var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  /* ---------- HERO ---------- */
+
+  .hero{
+    position:relative;
+    padding: 64px 24px 56px;
+    text-align:center;
+    border-bottom: 1px solid var(--line);
+    overflow:hidden;
+  }
+
+  .hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 42px 42px;
+    opacity:0.15;
+    mask-image: radial-gradient(circle at 50% 0%, black, transparent 70%);
+    pointer-events:none;
+  }
+
+  .brand{
+    position:relative;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size: clamp(2.2rem, 8vw, 4.4rem);
+    letter-spacing: -0.02em;
+    line-height:1;
+  }
+
+  .brand span{
+    background: var(--gradient);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  .tagline{
+    position:relative;
+    margin-top:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: clamp(0.72rem, 2.2vw, 0.9rem);
+    letter-spacing: 0.35em;
+    text-transform:uppercase;
+    color: var(--muted);
+  }
+
+  .tagline .dot{
+    color: var(--cyan);
+  }
+
+  .scan-frame{
+    position:relative;
+    max-width: 340px;
+    margin: 36px auto 0;
+    padding: 14px 22px;
+    border: 1px solid rgba(110,231,249,0.35);
+    font-family:'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--cyan);
+    letter-spacing: 0.15em;
+    text-transform:uppercase;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+  }
+
+  .scan-frame::before, .scan-frame::after,
+  .scan-frame span.c2::before, .scan-frame span.c2::after{
+    content:"";
+    position:absolute;
+    width:14px; height:14px;
+    border-color: var(--magenta);
+    border-style:solid;
+  }
+  .scan-frame::before{ top:-1px; left:-1px; border-width:2px 0 0 2px; }
+  .scan-frame::after{ top:-1px; right:-1px; border-width:2px 2px 0 0; }
+  .scan-frame span.c2::before{ bottom:-1px; left:-1px; border-width:0 0 2px 2px; }
+  .scan-frame span.c2::after{ bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
+
+  .pulse{
+    width:7px; height:7px;
+    border-radius:50%;
+    background: var(--cyan);
+    box-shadow: 0 0 0 0 rgba(110,231,249,0.6);
+    animation: pulse 2s infinite;
+    flex-shrink:0;
+  }
+
+  @keyframes pulse{
+    0%{ box-shadow: 0 0 0 0 rgba(110,231,249,0.5); }
+    70%{ box-shadow: 0 0 0 10px rgba(110,231,249,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(110,231,249,0); }
+  }
+
+  /* ---------- CATEGORY SECTIONS ---------- */
+
+  .category{
+    padding: 56px 24px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  .category + .category{
+    border-top: 1px solid var(--line);
+  }
+
+  .cat-head{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin-bottom: 28px;
+    flex-wrap:wrap;
+  }
+
+  .cat-eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.2em;
+    color: var(--muted);
+    border:1px solid var(--line);
+    padding:4px 10px;
+  }
+
+  .cat-title{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+  }
+
+  .cat-title em{
+    font-style:normal;
+    background: var(--gradient);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  /* ---------- PRODUCT GRID ---------- */
+
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  @media (min-width: 768px){
+    .grid{
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+  }
+
+  .card{
+    position:relative;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    cursor:pointer;
+    text-align:left;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .card:hover, .card:focus-visible{
+    border-color: rgba(110,231,249,0.55);
+    transform: translateY(-3px);
+  }
+
+  .card:focus-visible{ outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  .thumb{
+    position:relative;
+    aspect-ratio: 1 / 1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: var(--surface-2);
+    overflow:hidden;
+  }
+
+  .thumb svg{ width:52%; height:52%; position:relative; z-index:1; }
+
+  .thumb::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    opacity:0.5;
+  }
+
+  .corner{
+    position:absolute;
+    width:12px; height:12px;
+    border-color: var(--cyan);
+    border-style:solid;
+    opacity:0;
+    transition: opacity 0.25s ease;
+  }
+  .card:hover .corner{ opacity:0.85; }
+  .corner.tl{ top:8px; left:8px; border-width:1.5px 0 0 1.5px; }
+  .corner.tr{ top:8px; right:8px; border-width:1.5px 1.5px 0 0; }
+  .corner.bl{ bottom:8px; left:8px; border-width:0 0 1.5px 1.5px; }
+  .corner.br{ bottom:8px; right:8px; border-width:0 1.5px 1.5px 0; }
+
+  .ar-tag{
+    position:absolute;
+    top:8px; left:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.58rem;
+    letter-spacing:0.1em;
+    color: var(--bg);
+    background: var(--cyan);
+    padding:2px 6px;
+  }
+
+  .info{
+    padding: 12px 14px 14px;
+  }
+
+  .p-name{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size: 0.92rem;
+    line-height:1.3;
+  }
+
+  .p-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:8px;
+    font-family:'JetBrains Mono', monospace;
+  }
+
+  .p-price{ font-size:0.82rem; color: var(--cyan); }
+  .p-code{ font-size:0.62rem; color: var(--muted); }
+
+  /* ---------- MODAL ---------- */
+
+  .overlay{
+    position:fixed;
+    inset:0;
+    background: rgba(6,8,16,0.82);
+    backdrop-filter: blur(6px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 20px;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.25s ease;
+    z-index:50;
+  }
+
+  .overlay.active{ opacity:1; pointer-events:auto; }
+
+  .modal{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    max-width: 560px;
+    width:100%;
+    max-height: 88vh;
+    overflow-y:auto;
+    transform: translateY(16px);
+    transition: transform 0.25s ease;
+    display:grid;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width:600px){
+    .modal{ grid-template-columns: 1fr 1fr; }
+  }
+
+  .overlay.active .modal{ transform: translateY(0); }
+
+  .modal-thumb{
+    background: var(--surface-2);
+    aspect-ratio: 1/1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+
+  .modal-thumb svg{ width:48%; height:48%; }
+
+  .modal-body{
+    padding: 26px 24px;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .modal-eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.65rem;
+    letter-spacing:0.2em;
+    color: var(--cyan);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+
+  .modal-title{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:1.35rem;
+    line-height:1.2;
+  }
+
+  .modal-desc{
+    margin-top:12px;
+    font-size:0.86rem;
+    color: var(--muted);
+    line-height:1.6;
+  }
+
+  .modal-price{
+    margin-top:20px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:1.1rem;
+    color: var(--cyan);
+  }
+
+  .modal-actions{
+    margin-top:auto;
+    padding-top:22px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .btn-ar{
+    background: var(--gradient);
+    color: #0B0E1A;
+    border:none;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:0.85rem;
+    padding: 12px 16px;
+    cursor:pointer;
+    letter-spacing:0.02em;
+    transition: opacity 0.2s ease;
+  }
+  .btn-ar:hover{ opacity:0.88; }
+
+  .btn-close{
+    background:transparent;
+    border:1px solid var(--line);
+    color: var(--muted);
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    padding: 10px 16px;
+    cursor:pointer;
+    text-transform:uppercase;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .btn-close:hover{ border-color: var(--cyan); color: var(--cyan); }
+
+  .ar-status{
+    margin-top:14px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.68rem;
+    color: var(--muted);
+    display:none;
+  }
+  .ar-status.show{ display:block; color: var(--magenta); }
+
+  footer{
+    text-align:center;
+    padding: 40px 24px 48px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.68rem;
+    letter-spacing:0.15em;
+    color: var(--muted);
+    text-transform:uppercase;
+  }
+</style>
 </head>
-<body class="on">
+<body>
 
-    <div id="app"></div>
-    <div id="temporaryContent">
-        <div class="listProduct">
-        </div>
+<header class="hero">
+  <h1 class="brand">Virtual<span>Tsheert</span></h1>
+  <p class="tagline">Augmented Reality <span class="dot">·</span> Fashion</p>
+  <div class="scan-frame">
+    <span class="pulse"></span>
+    Arahkan kamera, coba sebelum beli
+    <span class="c2"></span>
+  </div>
+</header>
+
+<main>
+
+  <!-- KATEGORI 1 : KAOS -->
+  <section class="category" id="kaos">
+    <div class="cat-head">
+      <span class="cat-eyebrow">KATEGORI 01</span>
+      <h2 class="cat-title">Koleksi <em>Kaos</em></h2>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <div class="grid" id="grid-kaos"></div>
+  </section>
 
-    <script src="index.js" type="module"></script>
+  <!-- KATEGORI 2 : KEYCHAIN -->
+  <section class="category" id="keychain">
+    <div class="cat-head">
+      <span class="cat-eyebrow">KATEGORI 02</span>
+      <h2 class="cat-title">Koleksi <em>Keychain</em></h2>
+    </div>
+    <div class="grid" id="grid-keychain"></div>
+  </section>
+
+</main>
+
+<footer>VirtualTsheert — Coba dulu, baru pakai</footer>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-thumb" id="modal-thumb"></div>
+    <div class="modal-body">
+      <div class="modal-eyebrow" id="modal-eyebrow">KATEGORI</div>
+      <h3 class="modal-title" id="modal-title">Nama Produk</h3>
+      <p class="modal-desc" id="modal-desc">Deskripsi produk.</p>
+      <p class="modal-price" id="modal-price">Rp 0</p>
+      <div class="ar-status" id="ar-status">◆ AR PREVIEW AKTIF — MENGARAHKAN KAMERA...</div>
+      <div class="modal-actions">
+        <button class="btn-ar" id="btn-ar">Lihat dalam AR</button>
+        <button class="btn-close" id="btn-close">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- ICON SET (inline SVG, stroke = currentColor) ----------
+  const icons = {
+    tshirt: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 8 L8 16 L14 26 L20 22 V56 H44 V22 L50 26 L56 16 L44 8 C44 8 40 12 32 12 C24 12 20 8 20 8 Z"/></svg>`,
+    keychain: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="22" cy="16" r="9"/><line x1="22" y1="25" x2="22" y2="34"/><path d="M14 34 H44 L50 44 L44 54 H14 L8 44 Z"/></svg>`
+  };
+
+  // ---------- DATA ----------
+  const kaosColors = ['#6EE7F9','#FF5FD8','#8891B5','#6EE7F9','#FF5FD8','#8891B5','#6EE7F9','#FF5FD8'];
+  const kaosData = [
+    ["Kaos Grid Neon", "Katun combed 24s dengan cetak garis grid holografik di dada.", 149000],
+    ["Kaos Void Black", "Potongan oversized, warna hitam pekat, label karet minimalis.", 159000],
+    ["Kaos Pixel Fade", "Gradasi piksel cyan ke magenta, bahan lembut anti-luntur.", 165000],
+    ["Kaos Circuit Line", "Motif garis sirkuit tipis di lengan, fit regular.", 155000],
+    ["Kaos Scan Frame", "Cetak bingkai pemindai AR di bagian depan, unisex.", 149000],
+    ["Kaos Mono Lab", "Desain typographic laboratorium mode, katun premium.", 169000],
+    ["Kaos Hologram Wave", "Efek gelombang holografik reflektif ringan.", 175000],
+    ["Kaos Data Stream", "Print garis data vertikal, cocok dipadukan jaket.", 159000]
+  ];
+
+  const keychainColors = ['#FF5FD8','#6EE7F9','#8891B5','#FF5FD8','#6EE7F9','#8891B5','#FF5FD8','#6EE7F9'];
+  const keychainData = [
+    ["Keychain Cyber Tag", "Akrilik bening dengan ukiran logo AR reflektif.", 39000],
+    ["Keychain Pixel Cube", "Bentuk kubus mini warna gradasi, bahan resin.", 45000],
+    ["Keychain Signal Dot", "Aksen lampu berpendar dalam gelap, ringan.", 42000],
+    ["Keychain Circuit Chip", "Ukiran motif chip sirkuit, logam antikarat.", 49000],
+    ["Keychain Frame Mark", "Bentuk bingkai pemindai, dua warna aksen.", 39000],
+    ["Keychain Glitch Bar", "Potongan bar akrilik efek glitch bertumpuk.", 45000],
+    ["Keychain Mini Scan", "Ukuran mungil, gantungan logam kuat.", 35000],
+    ["Keychain Wave Tag", "Motif gelombang timbul, permukaan halus.", 42000]
+  ];
+
+  function formatRupiah(n){
+    return "Rp " + n.toLocaleString('id-ID');
+  }
+
+  function buildCard(type, iconKey, color, code, [name, desc, price]){
+    const card = document.createElement('button');
+    card.className = 'card';
+    card.type = 'button';
+    card.innerHTML = `
+      <div class="thumb" style="color:${color}">
+        <span class="ar-tag">AR</span>
+        ${icons[iconKey]}
+        <span class="corner tl"></span><span class="corner tr"></span>
+        <span class="corner bl"></span><span class="corner br"></span>
+      </div>
+      <div class="info">
+        <div class="p-name">${name}</div>
+        <div class="p-meta">
+          <span class="p-price">${formatRupiah(price)}</span>
+          <span class="p-code">${code}</span>
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', () => openModal(type, iconKey, color, name, desc, price));
+    return card;
+  }
+
+  const gridKaos = document.getElementById('grid-kaos');
+  kaosData.forEach((item, i) => {
+    gridKaos.appendChild(buildCard('Kaos', 'tshirt', kaosColors[i], 'KS-0' + (i+1), item));
+  });
+
+  const gridKeychain = document.getElementById('grid-keychain');
+  keychainData.forEach((item, i) => {
+    gridKeychain.appendChild(buildCard('Keychain', 'keychain', keychainColors[i], 'KC-0' + (i+1), item));
+  });
+
+  // ---------- MODAL LOGIC ----------
+  const overlay = document.getElementById('overlay');
+  const modalThumb = document.getElementById('modal-thumb');
+  const modalEyebrow = document.getElementById('modal-eyebrow');
+  const modalTitle = document.getElementById('modal-title');
+  const modalDesc = document.getElementById('modal-desc');
+  const modalPrice = document.getElementById('modal-price');
+  const arStatus = document.getElementById('ar-status');
+  const btnAr = document.getElementById('btn-ar');
+  const btnClose = document.getElementById('btn-close');
+
+  function openModal(type, iconKey, color, name, desc, price){
+    modalThumb.style.color = color;
+    modalThumb.innerHTML = icons[iconKey];
+    modalEyebrow.textContent = 'Kategori — ' + type;
+    modalTitle.textContent = name;
+    modalDesc.textContent = desc;
+    modalPrice.textContent = formatRupiah(price);
+    arStatus.classList.remove('show');
+    btnAr.textContent = 'Lihat dalam AR';
+    overlay.classList.add('active');
+  }
+
+  function closeModal(){
+    overlay.classList.remove('active');
+  }
+
+  btnClose.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+
+  btnAr.addEventListener('click', () => {
+    arStatus.classList.add('show');
+    btnAr.textContent = 'Memindai...';
+    setTimeout(() => {
+      btnAr.textContent = 'Lihat dalam AR';
+    }, 1600);
+  });
+</script>
+
 </body>
 </html>
