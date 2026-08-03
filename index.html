@@ -464,7 +464,7 @@
       <p class="modal-price" id="modal-price">Rp 0</p>
       <div class="ar-status" id="ar-status">◆ AR PREVIEW AKTIF — MENGARAHKAN KAMERA...</div>
       <div class="modal-actions">
-        <button class="btn-ar" id="btn-ar">Lihat dalam AR</button>
+        <button class="btn-ar" id="btn-ar">Scan Now</button>
         <button class="btn-close" id="btn-close">Tutup</button>
       </div>
     </div>
@@ -492,11 +492,15 @@
 
   const kaosColors = ['#6EE7F9','#FF5FD8','#8891B5','#6EE7F9','#FF5FD8','#8891B5','#6EE7F9','#FF5FD8'];
   const kaosData = [
-    { name:"Kaos Grid Neon",     desc:"Katun combed 24s dengan cetak garis grid holografik di dada.", price:149000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-1/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Kaos Void Black",    desc:"Potongan oversized, warna hitam pekat, label karet minimalis.", price:159000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-2/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Kaos Pixel Fade",    desc:"Gradasi piksel cyan ke magenta, bahan lembut anti-luntur.", price:165000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-3/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Kaos Circuit Line",  desc:"Motif garis sirkuit tipis di lengan, fit regular.", price:155000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-4/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Kaos Scan Frame",    desc:"Cetak bingkai pemindai AR di bagian depan, unisex.", price:149000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-5/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    // --- 5 produk ini sudah punya marker (kaos.mind index 0-4) + model 3D asli ---
+    { name:"Kaos Grid Neon",     desc:"Katun combed 24s dengan cetak garis grid holografik di dada.", price:149000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/aset3d/natan/scene.gltf",    scale:"75 75 75", pos:"0.1 -0.6 0", rot:"0 0 0", anim:"" }, // target index 0 - natan
+    { name:"Kaos Void Black",    desc:"Potongan oversized, warna hitam pekat, label karet minimalis.", price:159000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/aset3d/hanzo/scene.gltf",    scale:"75 75 75", pos:"0 -0.6 0",   rot:"0 0 0", anim:"" }, // target index 1 - hanzo
+    { name:"Kaos Pixel Fade",    desc:"Gradasi piksel cyan ke magenta, bahan lembut anti-luntur.", price:165000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/aset3d/hayabusa/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0",   rot:"0 0 0", anim:"" }, // target index 2 - hayabusa
+    { name:"Kaos Circuit Line",  desc:"Motif garis sirkuit tipis di lengan, fit regular.", price:155000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/aset3d/fredrin/scene.gltf",   scale:"75 75 75", pos:"0 -0.6 0",   rot:"0 0 0", anim:"" }, // target index 3 - fredrin
+    { name:"Kaos Scan Frame",    desc:"Cetak bingkai pemindai AR di bagian depan, unisex.", price:149000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/aset3d/claude/scene.gltf",    scale:"15 15 15", pos:"0 -0.6 0",   rot:"0 0 0", anim:"" }, // target index 4 - claude
+
+    // --- 3 produk ini BELUM ada marker & model asli (kaos.mind baru berisi 5 target) ---
+    // tinggal isi model: dan aktifkan setelah kamu compile 3 marker tambahan + tambah ke kaos.mind
     { name:"Kaos Mono Lab",      desc:"Desain typographic laboratorium mode, katun premium.", price:169000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-6/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
     { name:"Kaos Hologram Wave", desc:"Efek gelombang holografik reflektif ringan.", price:175000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-7/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
     { name:"Kaos Data Stream",   desc:"Print garis data vertikal, cocok dipadukan jaket.", price:159000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-8/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" }
