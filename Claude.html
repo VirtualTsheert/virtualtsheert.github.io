@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>VirtualTsheert — Scan Claude</title>
+
+<script>
+  // Patch supaya WebGL context bikin buffer-nya "diawetkan" (preserveDrawingBuffer)
+  // Ini WAJIB ada SEBELUM a-scene dibuat, biar tombol "Ambil Foto" bisa nangkep gambar kanvas AR.
+  (function () {
+    var origGetContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (type, attrs) {
+      if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') {
+        attrs = Object.assign({}, attrs, { preserveDrawingBuffer: true });
+      }
+      return origGetContext.call(this, type, attrs);
+    };
+  })();
+</script>
+
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.0.0/dist/aframe-extras.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+<style>
+  :root{
+    --bg: #0B0E1A;
+    --text: #ECE9FF;
+    --muted: #8891B5;
+    --cyan: #6EE7F9;
+    --magenta: #FF5FD8;
+  }
+  html, body{
+    margin:0; padding:0; height:100%;
+    background: var(--bg);
+    overflow:hidden;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  #top-bar{
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 14px 16px; pointer-events:none;
+  }
+
+  #back-btn, #product-tag{
+    pointer-events:auto;
+    background: rgba(11,14,26,0.75);
+    border: 1px solid rgba(110,231,249,0.45);
+    font-family: monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 8px 14px;
+    backdrop-filter: blur(6px);
+  }
+  #back-btn{ color: var(--text); cursor:pointer; }
+  #product-tag{ color: var(--cyan); text-transform:uppercase; }
+
+  #hint{
+    position:fixed; bottom: 96px; left:50%;
+    transform: translateX(-50%);
+    z-index:1000;
+    background: rgba(11,14,26,0.75);
+    border: 1px solid rgba(255,95,216,0.4);
+    color: var(--text);
+    font-family: monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    padding: 10px 18px;
+    text-align:center;
+    backdrop-filter: blur(6px);
+    max-width: 90%;
+    transition: opacity 0.3s ease;
+  }
+  #hint.hide{ opacity:0; pointer-events:none; }
+
+  #capture-btn{
+    position:fixed;
+    bottom: 24px; left:50%;
+    transform: translateX(-50%);
+    z-index:1000;
+    width: 68px; height: 68px;
+    border-radius:50%;
+    background: linear-gradient(135deg, var(--cyan), var(--magenta));
+    border: 3px solid rgba(255,255,255,0.85);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+  }
+  #capture-btn svg{ width:26px; height:26px; }
+
+  #loading, #error{
+    position:fixed; inset:0; z-index:2000;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column; gap:14px;
+    background: var(--bg); color: var(--text);
+    font-family: monospace; text-align:center; padding: 24px;
+  }
+  #error{ display:none; }
+
+  .dot-pulse{
+    width:10px; height:10px; border-radius:50%;
+    background: var(--cyan);
+    animation: pulse 1.4s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow: 0 0 0 0 rgba(110,231,249,0.55); }
+    70%{ box-shadow: 0 0 0 14px rgba(110,231,249,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(110,231,249,0); }
+  }
+  .small{ font-size:0.68rem; color: var(--muted); letter-spacing:0.05em; }
+
+  /* ---- preview hasil foto ---- */
+  #capture-preview{
+    position:fixed; inset:0; z-index:3000;
+    background: rgba(6,8,16,0.92);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:18px; padding:24px;
+  }
+  #capture-preview.hidden{ display:none; }
+  #capture-img{
+    max-width:92%; max-height:65vh;
+    border: 1px solid rgba(110,231,249,0.5);
+    border-radius:4px;
+  }
+  .capture-actions{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+  .capture-actions a, .capture-actions button{
+    font-family: 'Segoe UI', sans-serif;
+    font-weight:600;
+    font-size:0.85rem;
+    padding: 12px 20px;
+    border:none;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
+  }
+  #download-link{
+    background: linear-gradient(120deg, var(--cyan), var(--magenta));
+    color:#0B0E1A;
+  }
+  #close-preview-btn{
+    background:transparent;
+    border:1px solid var(--muted) !important;
+    color: var(--muted);
+  }
+  .capture-note{
+    font-family: monospace;
+    font-size:0.65rem;
+    color: var(--muted);
+    text-align:center;
+    max-width:280px;
+  }
+</style>
+</head>
+<body>
+
+<div id="top-bar">
+  <button id="back-btn" onclick="goBack()">← Kembali</button>
+  <div id="product-tag">Claude</div>
+</div>
+
+<div id="hint">◆ Arahkan kamera ke penanda produk</div>
+
+<div id="loading">
+  <div class="dot-pulse"></div>
+  <div>Menyiapkan kamera AR...</div>
+  <div class="small">Izinkan akses kamera saat diminta</div>
+</div>
+
+<div id="error">
+  <div>Target AR gagal dimuat</div>
+  <div class="small">Coba refresh halaman ini</div>
+</div>
+
+<button id="capture-btn" onclick="capturePhoto()" aria-label="Ambil foto">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#0B0E1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/>
+    <circle cx="12" cy="13" r="4"/>
+  </svg>
+</button>
+
+<div id="capture-preview" class="hidden">
+  <img id="capture-img" src="" alt="Hasil foto AR" />
+  <div class="capture-actions">
+    <a id="download-link" download="virtualtsheert-claude.png">Simpan ke Perangkat</a>
+    <button id="close-preview-btn" onclick="closePreview()">Tutup</button>
+  </div>
+  <div class="capture-note">Kalau tombol simpan tidak jalan (khususnya iPhone), tekan &amp; tahan gambar di atas lalu pilih "Simpan ke Foto".</div>
+</div>
+
+<div id="ar-root"></div>
+
+<script>
+  function goBack(){
+    if (document.referrer) { window.location.href = document.referrer; }
+    else { window.location.href = 'index.html'; }
+  }
+
+  var TARGET = "https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/targets/kaos.mind";
+  var INDEX  = "4";
+  var MODEL  = "https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/aset3d/claude/scene.gltf";
+  var SCALE  = "15 15 15";
+  var POS    = "0 -0.6 0";
+  var ROT    = "0 0 0";
+
+  var sceneHTML = `
+    <a-scene
+      mindar-image="imageTargetSrc: ${TARGET}; maxTrack: 1; filterMinCF: 0.0001; filterBeta: 0.0001;"
+      color-space="sRGB"
+      renderer="colorManagement: true, physicallyCorrectLights, alpha: true"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+      loading-screen="enabled: false">
+      <a-assets>
+        <a-asset-item id="productModel" src="${MODEL}"></a-asset-item>
+      </a-assets>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-entity mindar-image-target="targetIndex: ${INDEX}">
+        <a-gltf-model
+          rotation="${ROT}"
+          position="${POS}"
+          scale="${SCALE}"
+          smooth-follow
+          src="#productModel"
+          animation-mixer>
+        </a-gltf-model>
+      </a-entity>
+    </a-scene>
+  `;
+
+  document.getElementById('ar-root').innerHTML = sceneHTML;
+
+  var sceneEl = document.querySelector('a-scene');
+
+  sceneEl.addEventListener('renderstart', function () {
+    setTimeout(function () {
+      document.getElementById('loading').style.display = 'none';
+    }, 600);
+  });
+
+  setTimeout(function () {
+    document.getElementById('loading').style.display = 'none';
+  }, 4000);
+
+  var targetEntity = document.querySelector('[mindar-image-target]');
+  if (targetEntity) {
+    targetEntity.addEventListener('targetFound', function () {
+      document.getElementById('hint').classList.add('hide');
+    });
+    targetEntity.addEventListener('targetLost', function () {
+      document.getElementById('hint').classList.remove('hide');
+    });
+  }
+
+  // ---------- AMBIL FOTO (kamera + model 3D digabung) ----------
+  function findCameraVideo(){
+    var vids = document.querySelectorAll('video');
+    for (var i = 0; i < vids.length; i++){
+      if (vids[i].videoWidth > 0 && vids[i].videoHeight > 0) return vids[i];
+    }
+    return null;
+  }
+
+  function capturePhoto(){
+    var video = findCameraVideo();
+    var canvas = sceneEl.canvas;
+
+    if (!video || !canvas){
+      alert('Kamera belum siap, coba lagi sebentar.');
+      return;
+    }
+
+    var out = document.createElement('canvas');
+    out.width = canvas.width;
+    out.height = canvas.height;
+    var ctx = out.getContext('2d');
+
+    // gambar frame kamera dulu (cover-fit, biar gak gepeng)
+    var vw = video.videoWidth, vh = video.videoHeight;
+    var cw = out.width, ch = out.height;
+    var scale = Math.max(cw / vw, ch / vh);
+    var dw = vw * scale, dh = vh * scale;
+    var dx = (cw - dw) / 2, dy = (ch - dh) / 2;
+    ctx.drawImage(video, dx, dy, dw, dh);
+
+    // gambar kanvas AR (background transparan) di atasnya
+    ctx.drawImage(canvas, 0, 0, cw, ch);
+
+    var dataUrl = out.toDataURL('image/png');
+    document.getElementById('capture-img').src = dataUrl;
+    document.getElementById('download-link').href = dataUrl;
+    document.getElementById('capture-preview').classList.remove('hidden');
+  }
+
+  function closePreview(){
+    document.getElementById('capture-preview').classList.add('hidden');
+  }
+</script>
+
+</body>
+</html>

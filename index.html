@@ -464,7 +464,7 @@
       <p class="modal-price" id="modal-price">Rp 0</p>
       <div class="ar-status" id="ar-status">◆ AR PREVIEW AKTIF — MENGARAHKAN KAMERA...</div>
       <div class="modal-actions">
-        <button class="btn-ar" id="btn-ar">Scan Now</button>
+        <button class="btn-ar" id="btn-ar">Lihat dalam AR</button>
         <button class="btn-close" id="btn-close">Tutup</button>
       </div>
     </div>
@@ -487,35 +487,35 @@
   // scale/pos/rot : penyesuaian ukuran & posisi model saat muncul di atas marker
   // anim      : nama animasi di dalam model (kosongkan "" kalau modelnya statis)
 
-  const AR_TARGET_KAOS     = "https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/targets/kaos.mind";
-  const AR_TARGET_KEYCHAIN = "https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/targets/keychain.mind";
+  const AR_TARGET_KAOS     = "https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/targets/kaos.mind";
+  const AR_TARGET_KEYCHAIN = "https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/targets/keychain.mind";
 
   const kaosColors = ['#6EE7F9','#FF5FD8','#8891B5','#6EE7F9','#FF5FD8','#8891B5','#6EE7F9','#FF5FD8'];
   const kaosData = [
-    // --- 5 produk ini sudah punya marker (kaos.mind index 0-4) + model 3D asli ---
-    { name:"Kaos Grid Neon",     desc:"Katun combed 24s dengan cetak garis grid holografik di dada.", price:149000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/aset3d/natan/scene.gltf",    scale:"75 75 75", pos:"0.1 -0.6 0", rot:"0 0 0", anim:"" }, // target index 0 - natan
-    { name:"Kaos Void Black",    desc:"Potongan oversized, warna hitam pekat, label karet minimalis.", price:159000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/aset3d/hanzo/scene.gltf",    scale:"75 75 75", pos:"0 -0.6 0",   rot:"0 0 0", anim:"" }, // target index 1 - hanzo
-    { name:"Kaos Pixel Fade",    desc:"Gradasi piksel cyan ke magenta, bahan lembut anti-luntur.", price:165000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/aset3d/hayabusa/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0",   rot:"0 0 0", anim:"" }, // target index 2 - hayabusa
-    { name:"Kaos Circuit Line",  desc:"Motif garis sirkuit tipis di lengan, fit regular.", price:155000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/aset3d/fredrin/scene.gltf",   scale:"75 75 75", pos:"0 -0.6 0",   rot:"0 0 0", anim:"" }, // target index 3 - fredrin
-    { name:"Kaos Scan Frame",    desc:"Cetak bingkai pemindai AR di bagian depan, unisex.", price:149000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/aset3d/claude/scene.gltf",    scale:"15 15 15", pos:"0 -0.6 0",   rot:"0 0 0", anim:"" }, // target index 4 - claude
+    // --- 5 produk ini sudah punya marker (kaos.mind index 0-4) + halaman AR sendiri ---
+    { name:"Kaos Grid Neon",     desc:"Katun combed 24s dengan cetak garis grid holografik di dada.", price:149000, arPage:"natan.html" },
+    { name:"Kaos Void Black",    desc:"Potongan oversized, warna hitam pekat, label karet minimalis.", price:159000, arPage:"hanzo.html" },
+    { name:"Kaos Pixel Fade",    desc:"Gradasi piksel cyan ke magenta, bahan lembut anti-luntur.", price:165000, arPage:"hayabusa.html" },
+    { name:"Kaos Circuit Line",  desc:"Motif garis sirkuit tipis di lengan, fit regular.", price:155000, arPage:"fredrin.html" },
+    { name:"Kaos Scan Frame",    desc:"Cetak bingkai pemindai AR di bagian depan, unisex.", price:149000, arPage:"claude.html" },
 
-    // --- 3 produk ini BELUM ada marker & model asli (kaos.mind baru berisi 5 target) ---
-    // tinggal isi model: dan aktifkan setelah kamu compile 3 marker tambahan + tambah ke kaos.mind
-    { name:"Kaos Mono Lab",      desc:"Desain typographic laboratorium mode, katun premium.", price:169000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-6/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Kaos Hologram Wave", desc:"Efek gelombang holografik reflektif ringan.", price:175000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-7/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Kaos Data Stream",   desc:"Print garis data vertikal, cocok dipadukan jaket.", price:159000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-8/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" }
+    // --- 3 produk ini BELUM ada marker & halaman AR sendiri ---
+    // tinggal compile marker tambahan, bikin file HTML baru (copy dari natan.html misalnya), lalu isi arPage di sini
+    { name:"Kaos Mono Lab",      desc:"Desain typographic laboratorium mode, katun premium.", price:169000, arPage:null },
+    { name:"Kaos Hologram Wave", desc:"Efek gelombang holografik reflektif ringan.", price:175000, arPage:null },
+    { name:"Kaos Data Stream",   desc:"Print garis data vertikal, cocok dipadukan jaket.", price:159000, arPage:null }
   ];
 
   const keychainColors = ['#FF5FD8','#6EE7F9','#8891B5','#FF5FD8','#6EE7F9','#8891B5','#FF5FD8','#6EE7F9'];
   const keychainData = [
-    { name:"Keychain Cyber Tag",   desc:"Akrilik bening dengan ukiran logo AR reflektif.", price:39000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-1/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Pixel Cube",  desc:"Bentuk kubus mini warna gradasi, bahan resin.", price:45000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-2/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Signal Dot",  desc:"Aksen lampu berpendar dalam gelap, ringan.", price:42000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-3/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Circuit Chip",desc:"Ukiran motif chip sirkuit, logam antikarat.", price:49000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-4/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Frame Mark",  desc:"Bentuk bingkai pemindai, dua warna aksen.", price:39000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-5/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Glitch Bar",  desc:"Potongan bar akrilik efek glitch bertumpuk.", price:45000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-6/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Mini Scan",   desc:"Ukuran mungil, gantungan logam kuat.", price:35000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-7/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Wave Tag",    desc:"Motif gelombang timbul, permukaan halus.", price:42000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-8/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" }
+    { name:"Keychain Cyber Tag",   desc:"Akrilik bening dengan ukiran logo AR reflektif.", price:39000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-1/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Pixel Cube",  desc:"Bentuk kubus mini warna gradasi, bahan resin.", price:45000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-2/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Signal Dot",  desc:"Aksen lampu berpendar dalam gelap, ringan.", price:42000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-3/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Circuit Chip",desc:"Ukiran motif chip sirkuit, logam antikarat.", price:49000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-4/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Frame Mark",  desc:"Bentuk bingkai pemindai, dua warna aksen.", price:39000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-5/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Glitch Bar",  desc:"Potongan bar akrilik efek glitch bertumpuk.", price:45000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-6/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Mini Scan",   desc:"Ukuran mungil, gantungan logam kuat.", price:35000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-7/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Wave Tag",    desc:"Motif gelombang timbul, permukaan halus.", price:42000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-8/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" }
   ];
 
   function formatRupiah(n){
@@ -577,7 +577,7 @@
     modalPrice.textContent = formatRupiah(item.price);
     arStatus.classList.remove('show');
     btnAr.textContent = 'Lihat dalam AR';
-    currentAr = { target, index, model: item.model, scale: item.scale, pos: item.pos, rot: item.rot, anim: item.anim, name: item.name };
+    currentAr = item.arPage || null; // nama file AR khusus produk ini, mis. "natan.html"
     overlay.classList.add('active');
   }
 
@@ -590,24 +590,16 @@
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
 
   btnAr.addEventListener('click', () => {
-    if (!currentAr) return;
+    if (!currentAr) {
+      arStatus.textContent = '◆ AR untuk produk ini belum tersedia';
+      arStatus.classList.add('show');
+      return;
+    }
     arStatus.classList.add('show');
     btnAr.textContent = 'Membuka kamera...';
-
-    const p = new URLSearchParams({
-      target: currentAr.target,
-      index:  currentAr.index,
-      model:  currentAr.model,
-      scale:  currentAr.scale,
-      pos:    currentAr.pos,
-      rot:    currentAr.rot,
-      anim:   currentAr.anim || '',
-      name:   currentAr.name
-    });
-
     setTimeout(() => {
-      window.location.href = 'ar.html?' + p.toString();
-    }, 500);
+      window.location.href = currentAr;
+    }, 400);
   });
 </script>
 
