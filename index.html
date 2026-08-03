@@ -39,7 +39,7 @@
 
   .hero{
     position:relative;
-    padding: 64px 24px 56px;
+    padding: 28px 24px 32px;
     text-align:center;
     border-bottom: 1px solid var(--line);
     overflow:hidden;
@@ -76,7 +76,7 @@
 
   .tagline{
     position:relative;
-    margin-top:18px;
+    margin-top:10px;
     font-family:'JetBrains Mono', monospace;
     font-size: clamp(0.72rem, 2.2vw, 0.9rem);
     letter-spacing: 0.35em;
@@ -91,7 +91,7 @@
   .scan-frame{
     position:relative;
     max-width: 340px;
-    margin: 36px auto 0;
+    margin: 22px auto 0;
     padding: 14px 22px;
     border: 1px solid rgba(110,231,249,0.35);
     font-family:'JetBrains Mono', monospace;
@@ -136,7 +136,7 @@
   /* ---------- CATEGORY SECTIONS ---------- */
 
   .category{
-    padding: 56px 24px;
+    padding: 36px 24px 28px;
     max-width: 1180px;
     margin: 0 auto;
   }
@@ -149,7 +149,7 @@
     display:flex;
     align-items:baseline;
     gap:14px;
-    margin-bottom: 28px;
+    margin-bottom: 18px;
     flex-wrap:wrap;
   }
 
@@ -408,7 +408,7 @@
 
   footer{
     text-align:center;
-    padding: 40px 24px 48px;
+    padding: 24px 24px 32px;
     font-family:'JetBrains Mono', monospace;
     font-size:0.68rem;
     letter-spacing:0.15em;
@@ -479,35 +479,46 @@
   };
 
   // ---------- DATA ----------
+  // GANTI URL DI SINI kalau target/model AR sudah kamu compile & upload.
+  //
+  // arTarget  : file .mind hasil compile marker (bisa 1 file berisi banyak target per kategori)
+  // arIndex   : urutan target di dalam file .mind itu (0, 1, 2, ...) — harus sesuai urutan saat compile
+  // model     : file .glb / .gltf model 3D produk itu
+  // scale/pos/rot : penyesuaian ukuran & posisi model saat muncul di atas marker
+  // anim      : nama animasi di dalam model (kosongkan "" kalau modelnya statis)
+
+  const AR_TARGET_KAOS     = "https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/targets/kaos.mind";
+  const AR_TARGET_KEYCHAIN = "https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/targets/keychain.mind";
+
   const kaosColors = ['#6EE7F9','#FF5FD8','#8891B5','#6EE7F9','#FF5FD8','#8891B5','#6EE7F9','#FF5FD8'];
   const kaosData = [
-    ["Kaos Grid Neon", "Katun combed 24s dengan cetak garis grid holografik di dada.", 149000],
-    ["Kaos Void Black", "Potongan oversized, warna hitam pekat, label karet minimalis.", 159000],
-    ["Kaos Pixel Fade", "Gradasi piksel cyan ke magenta, bahan lembut anti-luntur.", 165000],
-    ["Kaos Circuit Line", "Motif garis sirkuit tipis di lengan, fit regular.", 155000],
-    ["Kaos Scan Frame", "Cetak bingkai pemindai AR di bagian depan, unisex.", 149000],
-    ["Kaos Mono Lab", "Desain typographic laboratorium mode, katun premium.", 169000],
-    ["Kaos Hologram Wave", "Efek gelombang holografik reflektif ringan.", 175000],
-    ["Kaos Data Stream", "Print garis data vertikal, cocok dipadukan jaket.", 159000]
+    { name:"Kaos Grid Neon",     desc:"Katun combed 24s dengan cetak garis grid holografik di dada.", price:149000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-1/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Kaos Void Black",    desc:"Potongan oversized, warna hitam pekat, label karet minimalis.", price:159000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-2/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Kaos Pixel Fade",    desc:"Gradasi piksel cyan ke magenta, bahan lembut anti-luntur.", price:165000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-3/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Kaos Circuit Line",  desc:"Motif garis sirkuit tipis di lengan, fit regular.", price:155000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-4/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Kaos Scan Frame",    desc:"Cetak bingkai pemindai AR di bagian depan, unisex.", price:149000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-5/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Kaos Mono Lab",      desc:"Desain typographic laboratorium mode, katun premium.", price:169000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-6/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Kaos Hologram Wave", desc:"Efek gelombang holografik reflektif ringan.", price:175000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-7/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Kaos Data Stream",   desc:"Print garis data vertikal, cocok dipadukan jaket.", price:159000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/kaos-8/scene.gltf", scale:"75 75 75", pos:"0 -0.6 0", rot:"0 0 0", anim:"" }
   ];
 
   const keychainColors = ['#FF5FD8','#6EE7F9','#8891B5','#FF5FD8','#6EE7F9','#8891B5','#FF5FD8','#6EE7F9'];
   const keychainData = [
-    ["Keychain Cyber Tag", "Akrilik bening dengan ukiran logo AR reflektif.", 39000],
-    ["Keychain Pixel Cube", "Bentuk kubus mini warna gradasi, bahan resin.", 45000],
-    ["Keychain Signal Dot", "Aksen lampu berpendar dalam gelap, ringan.", 42000],
-    ["Keychain Circuit Chip", "Ukiran motif chip sirkuit, logam antikarat.", 49000],
-    ["Keychain Frame Mark", "Bentuk bingkai pemindai, dua warna aksen.", 39000],
-    ["Keychain Glitch Bar", "Potongan bar akrilik efek glitch bertumpuk.", 45000],
-    ["Keychain Mini Scan", "Ukuran mungil, gantungan logam kuat.", 35000],
-    ["Keychain Wave Tag", "Motif gelombang timbul, permukaan halus.", 42000]
+    { name:"Keychain Cyber Tag",   desc:"Akrilik bening dengan ukiran logo AR reflektif.", price:39000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-1/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Pixel Cube",  desc:"Bentuk kubus mini warna gradasi, bahan resin.", price:45000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-2/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Signal Dot",  desc:"Aksen lampu berpendar dalam gelap, ringan.", price:42000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-3/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Circuit Chip",desc:"Ukiran motif chip sirkuit, logam antikarat.", price:49000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-4/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Frame Mark",  desc:"Bentuk bingkai pemindai, dua warna aksen.", price:39000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-5/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Glitch Bar",  desc:"Potongan bar akrilik efek glitch bertumpuk.", price:45000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-6/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Mini Scan",   desc:"Ukuran mungil, gantungan logam kuat.", price:35000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-7/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Wave Tag",    desc:"Motif gelombang timbul, permukaan halus.", price:42000, model:"https://cdn.jsdelivr.net/gh/VirtualTsheert/assetsmind@main/models/keychain-8/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" }
   ];
 
   function formatRupiah(n){
     return "Rp " + n.toLocaleString('id-ID');
   }
 
-  function buildCard(type, iconKey, color, code, [name, desc, price]){
+  function buildCard(type, iconKey, color, code, target, index, item){
     const card = document.createElement('button');
     card.className = 'card';
     card.type = 'button';
@@ -519,25 +530,25 @@
         <span class="corner bl"></span><span class="corner br"></span>
       </div>
       <div class="info">
-        <div class="p-name">${name}</div>
+        <div class="p-name">${item.name}</div>
         <div class="p-meta">
-          <span class="p-price">${formatRupiah(price)}</span>
+          <span class="p-price">${formatRupiah(item.price)}</span>
           <span class="p-code">${code}</span>
         </div>
       </div>
     `;
-    card.addEventListener('click', () => openModal(type, iconKey, color, name, desc, price));
+    card.addEventListener('click', () => openModal(type, iconKey, color, target, index, item));
     return card;
   }
 
   const gridKaos = document.getElementById('grid-kaos');
   kaosData.forEach((item, i) => {
-    gridKaos.appendChild(buildCard('Kaos', 'tshirt', kaosColors[i], 'KS-0' + (i+1), item));
+    gridKaos.appendChild(buildCard('Kaos', 'tshirt', kaosColors[i], 'KS-0' + (i+1), AR_TARGET_KAOS, i, item));
   });
 
   const gridKeychain = document.getElementById('grid-keychain');
   keychainData.forEach((item, i) => {
-    gridKeychain.appendChild(buildCard('Keychain', 'keychain', keychainColors[i], 'KC-0' + (i+1), item));
+    gridKeychain.appendChild(buildCard('Keychain', 'keychain', keychainColors[i], 'KC-0' + (i+1), AR_TARGET_KEYCHAIN, i, item));
   });
 
   // ---------- MODAL LOGIC ----------
@@ -551,15 +562,18 @@
   const btnAr = document.getElementById('btn-ar');
   const btnClose = document.getElementById('btn-close');
 
-  function openModal(type, iconKey, color, name, desc, price){
+  let currentAr = null;
+
+  function openModal(type, iconKey, color, target, index, item){
     modalThumb.style.color = color;
     modalThumb.innerHTML = icons[iconKey];
     modalEyebrow.textContent = 'Kategori — ' + type;
-    modalTitle.textContent = name;
-    modalDesc.textContent = desc;
-    modalPrice.textContent = formatRupiah(price);
+    modalTitle.textContent = item.name;
+    modalDesc.textContent = item.desc;
+    modalPrice.textContent = formatRupiah(item.price);
     arStatus.classList.remove('show');
     btnAr.textContent = 'Lihat dalam AR';
+    currentAr = { target, index, model: item.model, scale: item.scale, pos: item.pos, rot: item.rot, anim: item.anim, name: item.name };
     overlay.classList.add('active');
   }
 
@@ -572,11 +586,24 @@
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
 
   btnAr.addEventListener('click', () => {
+    if (!currentAr) return;
     arStatus.classList.add('show');
-    btnAr.textContent = 'Memindai...';
+    btnAr.textContent = 'Membuka kamera...';
+
+    const p = new URLSearchParams({
+      target: currentAr.target,
+      index:  currentAr.index,
+      model:  currentAr.model,
+      scale:  currentAr.scale,
+      pos:    currentAr.pos,
+      rot:    currentAr.rot,
+      anim:   currentAr.anim || '',
+      name:   currentAr.name
+    });
+
     setTimeout(() => {
-      btnAr.textContent = 'Lihat dalam AR';
-    }, 1600);
+      window.location.href = 'ar.html?' + p.toString();
+    }, 500);
   });
 </script>
 
