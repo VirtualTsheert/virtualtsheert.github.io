@@ -222,6 +222,25 @@
 
   .thumb svg{ width:52%; height:52%; position:relative; z-index:1; }
 
+  .thumb-photo{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:1;
+  }
+
+  .thumb-icon-fallback{
+    width:52%;
+    height:52%;
+    position:relative;
+    z-index:1;
+    align-items:center;
+    justify-content:center;
+  }
+  .thumb-icon-fallback svg{ width:100%; height:100%; }
+
   .thumb::after{
     content:"";
     position:absolute;
@@ -258,22 +277,46 @@
     padding: 12px 14px 14px;
   }
 
+  .thumb img{
+    width:100%;
+    height:100%;
+    object-fit: cover;
+    position:relative;
+    z-index:1;
+  }
+
   .p-name{
     font-family:'Space Grotesk', sans-serif;
     font-weight:600;
     font-size: 0.92rem;
     line-height:1.3;
+    color: #FFFFFF;
   }
 
   .p-meta{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-top:8px;
+    margin-top:10px;
     font-family:'JetBrains Mono', monospace;
   }
 
-  .p-price{ font-size:0.82rem; color: var(--cyan); }
+  .p-scan{
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    color: var(--bg);
+    background: var(--gradient);
+    padding: 5px 10px;
+    text-transform:uppercase;
+    font-weight:600;
+  }
+
+  .p-scan.disabled{
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--line);
+  }
+
   .p-code{ font-size:0.62rem; color: var(--muted); }
 
   /* ---------- MODAL ---------- */
@@ -461,10 +504,9 @@
       <div class="modal-eyebrow" id="modal-eyebrow">KATEGORI</div>
       <h3 class="modal-title" id="modal-title">Nama Produk</h3>
       <p class="modal-desc" id="modal-desc">Deskripsi produk.</p>
-      <p class="modal-price" id="modal-price">Rp 0</p>
       <div class="ar-status" id="ar-status">◆ AR PREVIEW AKTIF — MENGARAHKAN KAMERA...</div>
       <div class="modal-actions">
-        <button class="btn-ar" id="btn-ar">Lihat dalam AR</button>
+        <button class="btn-ar" id="btn-ar">Scan Now</button>
         <button class="btn-close" id="btn-close">Tutup</button>
       </div>
     </div>
@@ -493,33 +535,42 @@
   const kaosColors = ['#6EE7F9','#FF5FD8','#8891B5','#6EE7F9','#FF5FD8','#8891B5','#6EE7F9','#FF5FD8'];
   const kaosData = [
     // --- 5 produk ini sudah punya marker (kaos.mind index 0-4) + halaman AR sendiri ---
-    { name:"Kaos Grid Neon",     desc:"Katun combed 24s dengan cetak garis grid holografik di dada.", price:149000, arPage:"natan.html" },
-    { name:"Kaos Void Black",    desc:"Potongan oversized, warna hitam pekat, label karet minimalis.", price:159000, arPage:"hanzo.html" },
-    { name:"Kaos Pixel Fade",    desc:"Gradasi piksel cyan ke magenta, bahan lembut anti-luntur.", price:165000, arPage:"hayabusa.html" },
-    { name:"Kaos Circuit Line",  desc:"Motif garis sirkuit tipis di lengan, fit regular.", price:155000, arPage:"fredrin.html" },
-    { name:"Kaos Scan Frame",    desc:"Cetak bingkai pemindai AR di bagian depan, unisex.", price:149000, arPage:"claude.html" },
+    { name:"Natan Tshirt",    desc:"Artwork biru arus laut bergaya Collector, dipadukan garis sirkuit digital di bagian dada.", arPage:"natan.html",    imageKey:"natan" },
+    { name:"Hanzo Tshirt",    desc:"Armor ninja merah-ungu bernuansa gelap dengan aksen circuit line khas VirtualTsheert.", arPage:"hanzo.html",    imageKey:"hanzo" },
+    { name:"Hayabusa Tshirt", desc:"Siluet shinobi bertopeng dengan gradasi merah senja, terkesan misterius dan tajam.", arPage:"hayabusa.html", imageKey:"hayabusa" },
+    { name:"Fredrin Tshirt",  desc:"Gaya rapi berjaket putih berbulu, aksen armor emas-biru, cocok tampil kasual.", arPage:"fredrin.html",   imageKey:"fredrin" },
+    { name:"Claude Tshirt",   desc:"Armor mekanik naga dengan rambut oranye menyala, sentuhan futuristik penuh detail.", arPage:"claude.html",    imageKey:"claude" },
 
     // --- 3 produk ini BELUM ada marker & halaman AR sendiri ---
-    // tinggal compile marker tambahan, bikin file HTML baru (copy dari natan.html misalnya), lalu isi arPage di sini
-    { name:"Kaos Mono Lab",      desc:"Desain typographic laboratorium mode, katun premium.", price:169000, arPage:null },
-    { name:"Kaos Hologram Wave", desc:"Efek gelombang holografik reflektif ringan.", price:175000, arPage:null },
-    { name:"Kaos Data Stream",   desc:"Print garis data vertikal, cocok dipadukan jaket.", price:159000, arPage:null }
+    // tinggal compile marker tambahan, bikin file HTML baru (copy dari natan.html misalnya), lalu isi arPage & imageKey di sini
+    { name:"Kaos Mono Lab",      desc:"Desain typographic laboratorium mode, katun premium.", arPage:null, imageKey:null },
+    { name:"Kaos Hologram Wave", desc:"Efek gelombang holografik reflektif ringan.", arPage:null, imageKey:null },
+    { name:"Kaos Data Stream",   desc:"Print garis data vertikal, cocok dipadukan jaket.", arPage:null, imageKey:null }
   ];
 
   const keychainColors = ['#FF5FD8','#6EE7F9','#8891B5','#FF5FD8','#6EE7F9','#8891B5','#FF5FD8','#6EE7F9'];
   const keychainData = [
-    { name:"Keychain Cyber Tag",   desc:"Akrilik bening dengan ukiran logo AR reflektif.", price:39000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-1/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Pixel Cube",  desc:"Bentuk kubus mini warna gradasi, bahan resin.", price:45000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-2/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Signal Dot",  desc:"Aksen lampu berpendar dalam gelap, ringan.", price:42000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-3/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Circuit Chip",desc:"Ukiran motif chip sirkuit, logam antikarat.", price:49000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-4/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Frame Mark",  desc:"Bentuk bingkai pemindai, dua warna aksen.", price:39000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-5/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Glitch Bar",  desc:"Potongan bar akrilik efek glitch bertumpuk.", price:45000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-6/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Mini Scan",   desc:"Ukuran mungil, gantungan logam kuat.", price:35000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-7/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
-    { name:"Keychain Wave Tag",    desc:"Motif gelombang timbul, permukaan halus.", price:42000, model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-8/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" }
+    { name:"Keychain Cyber Tag",   desc:"Akrilik bening dengan ukiran logo AR reflektif.", model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-1/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Pixel Cube",  desc:"Bentuk kubus mini warna gradasi, bahan resin.", model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-2/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Signal Dot",  desc:"Aksen lampu berpendar dalam gelap, ringan.", model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-3/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Circuit Chip",desc:"Ukiran motif chip sirkuit, logam antikarat.", model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-4/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Frame Mark",  desc:"Bentuk bingkai pemindai, dua warna aksen.", model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-5/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Glitch Bar",  desc:"Potongan bar akrilik efek glitch bertumpuk.", model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-6/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Mini Scan",   desc:"Ukuran mungil, gantungan logam kuat.", model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-7/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" },
+    { name:"Keychain Wave Tag",    desc:"Motif gelombang timbul, permukaan halus.", model:"https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/models/keychain-8/scene.gltf", scale:"15 15 15", pos:"0 -0.6 0", rot:"0 0 0", anim:"" }
   ];
 
-  function formatRupiah(n){
-    return "Rp " + n.toLocaleString('id-ID');
+  const IMAGE_BASE = "https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/thumbnail/product/";
+
+  function thumbMarkup(iconKey, imageKey, name){
+    if (!imageKey){
+      return icons[iconKey];
+    }
+    return `
+      <img class="thumb-photo" src="${IMAGE_BASE}${imageKey}.png" alt="${name}"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <span class="thumb-icon-fallback" style="display:none">${icons[iconKey]}</span>
+    `;
   }
 
   function buildCard(type, iconKey, color, code, target, index, item){
@@ -529,14 +580,14 @@
     card.innerHTML = `
       <div class="thumb" style="color:${color}">
         <span class="ar-tag">AR</span>
-        ${icons[iconKey]}
+        ${thumbMarkup(iconKey, item.imageKey, item.name)}
         <span class="corner tl"></span><span class="corner tr"></span>
         <span class="corner bl"></span><span class="corner br"></span>
       </div>
       <div class="info">
         <div class="p-name">${item.name}</div>
         <div class="p-meta">
-          <span class="p-price">${formatRupiah(item.price)}</span>
+          <span class="p-scan ${item.arPage ? '' : 'disabled'}">${item.arPage ? 'Scan Now' : 'Segera'}</span>
           <span class="p-code">${code}</span>
         </div>
       </div>
@@ -561,7 +612,6 @@
   const modalEyebrow = document.getElementById('modal-eyebrow');
   const modalTitle = document.getElementById('modal-title');
   const modalDesc = document.getElementById('modal-desc');
-  const modalPrice = document.getElementById('modal-price');
   const arStatus = document.getElementById('ar-status');
   const btnAr = document.getElementById('btn-ar');
   const btnClose = document.getElementById('btn-close');
@@ -570,13 +620,12 @@
 
   function openModal(type, iconKey, color, target, index, item){
     modalThumb.style.color = color;
-    modalThumb.innerHTML = icons[iconKey];
+    modalThumb.innerHTML = thumbMarkup(iconKey, item.imageKey, item.name);
     modalEyebrow.textContent = 'Kategori — ' + type;
     modalTitle.textContent = item.name;
     modalDesc.textContent = item.desc;
-    modalPrice.textContent = formatRupiah(item.price);
     arStatus.classList.remove('show');
-    btnAr.textContent = 'Lihat dalam AR';
+    btnAr.textContent = 'Scan Now';
     currentAr = item.arPage || null; // nama file AR khusus produk ini, mis. "natan.html"
     overlay.classList.add('active');
   }

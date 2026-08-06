@@ -150,7 +150,52 @@
     color: var(--muted);
     text-align:center;
     max-width:280px;
+  }  #ar-root{
+    position:fixed; inset:0; z-index:0;
+    background: transparent;
   }
+
+  /* Paksa elemen <video> kamera (dibikin oleh MindAR) selalu tampil penuh layar */
+  video{
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 0 !important;
+  }
+
+  a-scene{
+    position: fixed !important;
+    top:0; left:0;
+    width:100% !important;
+    height:100% !important;
+    z-index: 1 !important;
+  }
+
+  a-scene canvas{
+    background: transparent !important;
+    z-index: 1 !important;
+  }  #tracker-guide{
+    position:fixed;
+    top:50%; left:50%;
+    transform: translate(-50%,-50%);
+    width: min(62vw, 320px);
+    aspect-ratio: 1/1;
+    z-index: 2;
+    pointer-events:none;
+    opacity: 0.55;
+    mix-blend-mode: screen;
+    transition: opacity 0.4s ease;
+  }
+  #tracker-guide img{
+    width:100%; height:100%;
+    object-fit: contain;
+  }
+  #tracker-guide.found{ opacity: 0; }
 </style>
 </head>
 <body>
@@ -160,7 +205,12 @@
   <div id="product-tag">Fredrin</div>
 </div>
 
+<div id="tracker-guide">
+  <img src="https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/thumbnail/targetracker/fredrin.png" alt="Panduan marker Fredrin">
+</div>
+
 <div id="hint">◆ Arahkan kamera ke penanda produk</div>
+
 
 <div id="loading">
   <div class="dot-pulse"></div>
@@ -208,7 +258,7 @@
     <a-scene
       mindar-image="imageTargetSrc: ${TARGET}; maxTrack: 1; filterMinCF: 0.0001; filterBeta: 0.0001;"
       color-space="sRGB"
-      renderer="colorManagement: true, physicallyCorrectLights, alpha: true"
+      renderer="colorManagement: true; physicallyCorrectLights: true; alpha: true;"
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
       loading-screen="enabled: false">
@@ -235,10 +285,36 @@
 
   var sceneEl = document.querySelector('a-scene');
 
+  // ---------- PAKSA VIDEO KAMERA TETAP TERLIHAT ----------
+  // Kadang video kamera dari MindAR ke-hide/ketutup gara-gara CSS bentrok.
+  // Ini terus-terusan "membenerin" style-nya selama beberapa detik pertama.
+  function forceVideoVisible(){
+    var vids = document.querySelectorAll('video');
+    vids.forEach(function (v) {
+      v.style.setProperty('opacity', '1', 'important');
+      v.style.setProperty('visibility', 'visible', 'important');
+      v.style.setProperty('display', 'block', 'important');
+      v.style.setProperty('z-index', '0', 'important');
+      v.style.setProperty('position', 'fixed', 'important');
+      v.style.setProperty('top', '0', 'important');
+      v.style.setProperty('left', '0', 'important');
+      v.style.setProperty('width', '100%', 'important');
+      v.style.setProperty('height', '100%', 'important');
+      v.style.setProperty('object-fit', 'cover', 'important');
+    });
+  }
+  var videoFixInterval = setInterval(forceVideoVisible, 300);
+  setTimeout(function () { clearInterval(videoFixInterval); }, 8000);
+
   sceneEl.addEventListener('renderstart', function () {
     setTimeout(function () {
       document.getElementById('loading').style.display = 'none';
     }, 600);
+  });
+
+  sceneEl.addEventListener('arError', function () {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error').style.display = 'flex';
   });
 
   setTimeout(function () {
@@ -246,12 +322,15 @@
   }, 4000);
 
   var targetEntity = document.querySelector('[mindar-image-target]');
+  var trackerGuide = document.getElementById('tracker-guide');
   if (targetEntity) {
     targetEntity.addEventListener('targetFound', function () {
       document.getElementById('hint').classList.add('hide');
+      if (trackerGuide) trackerGuide.classList.add('found');
     });
     targetEntity.addEventListener('targetLost', function () {
       document.getElementById('hint').classList.remove('hide');
+      if (trackerGuide) trackerGuide.classList.remove('found');
     });
   }
 
