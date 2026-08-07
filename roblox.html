@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>VirtualTsheert — Scan Natan</title>
+<title>VirtualTsheert — Scan Roblox</title>
 
 <script>
   // Patch supaya WebGL context bikin buffer-nya "diawetkan" (preserveDrawingBuffer)
@@ -277,11 +277,11 @@
 
 <div id="top-bar">
   <button id="back-btn" onclick="goBack()">← Kembali</button>
-  <div id="product-tag">Natan</div>
+  <div id="product-tag">Roblox</div>
 </div>
 
 <div id="tracker-guide">
-  <img src="https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/thumbnail/targetracker/natan.png" alt="Panduan marker Natan">
+  <img src="https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/thumbnail/targetracker/roblox.png" alt="Panduan marker Roblox">
 </div>
 
 <div id="hint">◆ Arahkan kamera ke penanda produk</div>
@@ -318,7 +318,7 @@
 <div id="capture-preview" class="hidden">
   <img id="capture-img" src="" alt="Hasil foto AR" />
   <div class="capture-actions">
-    <a id="download-link" download="virtualtsheert-natan.png">Simpan ke Perangkat</a>
+    <a id="download-link" download="virtualtsheert-roblox.png">Simpan ke Perangkat</a>
     <button id="close-preview-btn" onclick="closePreview()">Tutup</button>
   </div>
   <div class="capture-note">Kalau tombol simpan tidak jalan (khususnya iPhone), tekan &amp; tahan gambar di atas lalu pilih "Simpan ke Foto".</div>
@@ -327,7 +327,7 @@
 <div id="video-preview" class="hidden">
   <video id="video-result" controls playsinline></video>
   <div class="capture-actions">
-    <a id="video-download-link" download="virtualtsheert-natan.webm">Simpan ke Perangkat</a>
+    <a id="video-download-link" download="virtualtsheert-roblox.webm">Simpan ke Perangkat</a>
     <button id="close-video-btn" onclick="closeVideoPreview()">Tutup</button>
   </div>
   <div class="capture-note">Kalau tombol simpan tidak jalan di iPhone, buka video-nya lalu pakai opsi share/save bawaan browser.</div>
@@ -341,15 +341,15 @@
     else { window.location.href = 'index.html'; }
   }
 
-  var TARGET = "https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/targets/kaos.mind";
+  var TARGET = "https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/targets/keychain.mind";
   var INDEX  = "0";
-  var MODEL  = "https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/aset3d/natan/scene.gltf";
-  var SCALE  = "75 75 75";
-  var POS    = "0.1 -0.6 0";
+  var MODEL  = "https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/aset3d/roblox.glb";
+  var SCALE  = "20 20 20";
+  var POS    = "0 -0.5 0";
   var ROT    = "0 0 0";
 
   var HOLO_MODEL = "https://raw.githubusercontent.com/VirtualTsheert/assetsmind/main/aset3d/hologram/holorespawn.glb";
-  var HOLO_SCALE = "1 1 1";
+  var HOLO_SCALE = "0.6 0.6 0.6";
 
   var sceneHTML = `
     <a-scene
